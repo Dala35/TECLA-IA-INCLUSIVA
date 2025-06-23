@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECLA Inclusive AI</title>
+  <title>TECLA IA Inclusiva</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f7fb;
+      background: #f0f6fc;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #b22222;
+      background-color: #4682b4;
       padding: 20px;
       color: white;
       text-align: center;
     }
     nav {
-      background: #eee;
+      background: #e0eaf5;
       padding: 10px;
       display: flex;
       justify-content: center;
@@ -27,13 +27,13 @@
     nav button {
       padding: 10px 15px;
       border: none;
-      background: #b22222;
+      background: #4682b4;
       color: white;
       border-radius: 8px;
       cursor: pointer;
     }
     nav button:hover {
-      background: #d43f3f;
+      background: #5a9bd5;
     }
     .page {
       display: none;
@@ -65,7 +65,7 @@
       font-size: 16px;
     }
     footer {
-      background: #eee;
+      background: #e0eaf5;
       text-align: center;
       padding: 10px;
       font-size: 12px;
@@ -75,40 +75,40 @@
 </head>
 <body>
   <header>
-    <h1>TECLA Inclusive AI 🌍</h1>
-    <p>Your friendly assistant for neurodiverse communication ✨</p>
+    <h1>🤖 TECLA IA Inclusiva 🌍</h1>
+    <p>Seu assistente amigável para comunicação neurodiversa ✨</p>
   </header>
 
   <nav>
-    <button onclick="showPage('chat')">💬 Chat</button>
-    <button onclick="showPage('about')">ℹ️ About</button>
-    <button onclick="showPage('help')">🛟 Help</button>
+    <button onclick="showPage('chat')">💬 Conversar</button>
+    <button onclick="showPage('about')">ℹ️ Sobre</button>
+    <button onclick="showPage('help')">🛟 Ajuda</button>
   </nav>
 
   <div id="chat" class="page active">
     <div id="chat-box"></div>
-    <input id="userInput" type="text" placeholder="Type or speak here..." />
-    <button onclick="sendMessage()">Send</button>
-    <button onclick="startRecognition()">🎤 Speak</button>
+    <input id="userInput" type="text" placeholder="Escreve ou fala aqui..." />
+    <button onclick="sendMessage()">📤 Enviar</button>
+    <button onclick="startRecognition()">🎤 Falar</button>
   </div>
 
   <div id="about" class="page">
-    <h2>About TECLA</h2>
-    <p>🤖 TECLA is an inclusive AI chatbot designed to support people with autism and communication challenges.</p>
-    <p>🌟 It provides kind, clear, and supportive answers in a calm environment.</p>
+    <h2>ℹ️ Sobre o TECLA</h2>
+    <p>🤖 O TECLA é um chatbot de IA inclusiva projetado para apoiar pessoas com autismo e dificuldades de comunicação.</p>
+    <p>🌟 Ele oferece respostas gentis, claras e com apoio emocional num ambiente calmo.</p>
   </div>
 
   <div id="help" class="page">
-    <h2>Help & Tips</h2>
+    <h2>🛟 Ajuda e Dicas</h2>
     <ul>
-      <li>💡 Say "hello", "who are you", "I'm sad", "what is friendship", and more.</li>
-      <li>🎤 Press the microphone to talk using your voice (available in some browsers).</li>
-      <li>📱 Works offline after loading once. Save to home screen for easy access.</li>
+      <li>💡 Diz: "olá", "quem és tu", "estou triste", "o que é amizade", e mais.</li>
+      <li>🎤 Clica no microfone para usar a tua voz (disponível em alguns navegadores).</li>
+      <li>📱 Funciona offline depois de carregar uma vez. Adiciona à tela inicial!</li>
     </ul>
   </div>
 
   <footer>
-    Created by Dala De Carvalho – Inclusive Music Educator 🇦🇴
+    Criado por Dala De Carvalho – Educador Musical Inclusivo 🇦🇴
   </footer>
 
   <script>
@@ -119,14 +119,14 @@
     }
 
     const library = {
-      "hello": "👋 Hello! How can I help you today?",
-      "who are you": "🤖 I'm TECLA, your inclusive AI friend.",
-      "what is your mission": "🎯 My mission is to support communication in kind and respectful ways.",
-      "why were you created": "💡 I was created to help people who may need extra support to express themselves.",
-      "i'm sad": "😢 I'm sorry you're feeling that way. Do you want to talk about it? I'm here for you.",
-      "what is friendship": "🧡 Friendship means someone cares about you, respects you, and wants you to be happy.",
-      "what can i do when i feel alone": "🎨 You can draw, listen to music, play something you like, or talk to me.",
-      "bye": "👋 See you soon! I’ll be here when you need me."
+      "olá": "👋 Olá! Como posso ajudar hoje?",
+      "quem és tu": "🤖 Eu sou o TECLA, o teu amigo com inteligência artificial.",
+      "qual é a tua missão": "🎯 A minha missão é apoiar a comunicação de forma gentil e respeitosa.",
+      "por que foste criado": "💡 Fui criado para ajudar pessoas que precisam de apoio para se expressarem.",
+      "estou triste": "😢 Lamento que estejas assim. Queres conversar sobre isso? Estou aqui para ti.",
+      "o que é amizade": "🧡 Amizade é quando alguém se importa contigo, te respeita e quer o teu bem.",
+      "o que posso fazer quando me sinto sozinho": "🎨 Podes desenhar, ouvir música, brincar com algo que gostas ou falar comigo.",
+      "adeus": "👋 Até logo! Estarei aqui sempre que precisares."
     };
 
     const chatBox = document.getElementById("chat-box");
@@ -146,7 +146,7 @@
 
       addMessage("🧑 " + text, "user");
 
-      const resposta = library[text] || "❓ I haven’t learned that yet. Would you like to teach me?";
+      const resposta = library[text] || "❓ Ainda não aprendi isso. Queres ensinar-me?";
       addMessage("🤖 " + resposta, "bot");
       input.value = "";
     }
@@ -154,7 +154,7 @@
     function startRecognition() {
       try {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = "en-US";
+        recognition.lang = "pt-PT";
         recognition.onresult = function(event) {
           const result = event.results[0][0].transcript;
           document.getElementById("userInput").value = result;
@@ -162,7 +162,7 @@
         };
         recognition.start();
       } catch (e) {
-        alert("🎤 Voice recognition is not supported on this device/browser.");
+        alert("🎤 O reconhecimento de voz não é suportado neste dispositivo/navegador.");
       }
     }
   </script>
