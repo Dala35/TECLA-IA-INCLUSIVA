@@ -1,112 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TECLA IA 3.0</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TECLA IA Inclusiva com Voz</title>
   <style>
     body {
+      background: #f4f4f4;
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      color: #c00;
+      padding: 2rem;
       text-align: center;
     }
-    #chatBox {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 15px;
+    h1 {
+      color: #b22222;
+    }
+    #chat {
+      max-width: 600px;
+      margin: auto;
+      text-align: left;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
       height: 300px;
       overflow-y: auto;
-      margin-bottom: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    input[type="text"] {
-      width: 75%;
-      padding: 10px;
+    input, button {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     button {
-      padding: 10px 15px;
-      background: #c00;
-      color: white;
-      border: none;
       cursor: pointer;
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-    #modoInclusivo {
-      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>TECLA IA 3.0</h1>
-
-  <div id="chatBox">
-    <p><strong>TECLA IA:</strong> Olá! Como posso ajudar?</p>
-  </div>
-
-  <input type="text" id="inputPergunta" placeholder="Escreve aqui tua pergunta">
-  <button onclick="responder()">Enviar</button>
-
-  <label>
-    <input type="checkbox" id="modoInclusivo">
-    Ativar modo inclusivo (para utilizadores autistas)
-  </label>
+  <h1>TECLA IA Inclusiva 🔊</h1>
+  <div id="chat"></div>
+  <input type="text" id="input" placeholder="Escreve ou fala aqui..." />
+  <button onclick="enviar()">Enviar</button>
+  <button onclick="falar()">🎤 Falar</button>
 
   <script>
-    const respostasBase = {
-      "olá": "Olá! Tudo bem contigo?",
-      "quem és tu?": "Sou a TECLA IA 3.0 – tua assistente com foco cultural e educacional.",
-      "o que sabes fazer?": "Posso responder perguntas e até aprender contigo!",
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+
+    const memoria = {
+      "olá": "Olá! Como posso ajudar?",
+      "quem és tu": "Sou a TECLA IA, criada para apoiar e incluir.",
+      "obrigado": "Estou sempre aqui!",
+      "tudo bem": "Está tudo sim! E contigo?",
+      "adeus": "Tchau! Volta sempre."
     };
 
-    const respostasAprendidas = {};
-
-    function responder() {
-      const pergunta = document.getElementById("inputPergunta").value.toLowerCase().trim();
-      const chatBox = document.getElementById("chatBox");
-      const inclusivo = document.getElementById("modoInclusivo").checked;
-
-      let resposta = respostasBase[pergunta] || respostasAprendidas[pergunta];
-
-      if (!resposta) {
-        resposta = inclusivo 
-          ? "Não entendi. Queres ensinar-me o que devo responder?" 
-          : "Ainda não sei isso. Podes ensinar-me?";
-        respostasAprendidas[pergunta] = null; // Marca como pendente
-      }
-
-      chatBox.innerHTML += `<p><strong>Tu:</strong> ${pergunta}</p>`;
-      chatBox.innerHTML += `<p><strong>TECLA IA:</strong> ${resposta}</p>`;
-      document.getElementById("inputPergunta").value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      // Se está pendente, pede resposta
-      if (respostasAprendidas[pergunta] === null) {
-        setTimeout(() => {
-          const nova = prompt("Como devo responder a: \"" + pergunta + "\"?");
-          if (nova) {
-            respostasAprendidas[pergunta] = inclusivo ? ajustarParaInclusivo(nova) : nova;
-            chatBox.innerHTML += `<p><strong>TECLA IA:</strong> Aprendi! Obrigada por me ensinar.</p>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-          }
-        }, 300);
-      }
+    function escrever(msg, classe = 'user') {
+      const div = document.createElement('div');
+      div.textContent = msg;
+      div.style.margin = '0.5rem 0';
+      div.style.color = classe === 'user' ? '#222' : '#006400';
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    function ajustarParaInclusivo(texto) {
-      // Remove exageros e simplifica linguagem
-      return texto
-        .replace(/uau|incrível|fantástico|maravilhoso/gi, "")
-        .replace(/[!]{2,}/g, ".")
-        .replace(/(:|;)?\)|<3|😍|🔥/g, "")
-        .trim();
+    function responder(texto) {
+      let resposta = memoria[texto.toLowerCase()] || "Ainda não aprendi isso. Queres ensinar-me?";
+      escrever(resposta, 'bot');
+      falarTexto(resposta);
+    }
+
+    function enviar() {
+      const msg = input.value.trim();
+      if (!msg) return;
+      escrever(msg, 'user');
+      responder(msg);
+      input.value = '';
+    }
+
+    function falar() {
+      const reconhecimento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      reconhecimento.lang = 'pt-PT';
+      reconhecimento.start();
+
+      reconhecimento.onresult = function (event) {
+        const resultado = event.results[0][0].transcript;
+        escrever(resultado, 'user');
+        responder(resultado);
+      };
+    }
+
+    function falarTexto(texto) {
+      const fala = new SpeechSynthesisUtterance(texto);
+      fala.lang = 'pt-PT';
+      window.speechSynthesis.speak(fala);
     }
   </script>
 </body>
