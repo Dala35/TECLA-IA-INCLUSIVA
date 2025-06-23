@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECLA – IA Inclusiva</title>
+  <title>TECLA Adapta – IA Inclusiva</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #e6f0ff;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f8ff;
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
 
     header {
-      background-color: #005f99;
+      background-color: #005b99;
       color: white;
       padding: 1rem;
       text-align: center;
@@ -24,7 +24,7 @@
     nav {
       display: flex;
       justify-content: center;
-      background-color: #0077cc;
+      background-color: #007acc;
     }
 
     nav button {
@@ -75,6 +75,7 @@
       background: #ccc;
       display: flex;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     input {
@@ -85,7 +86,7 @@
       border-radius: 6px;
     }
 
-    button.send {
+    button.send, .emo-btn {
       padding: 0.75rem 1rem;
       background: #0077cc;
       color: white;
@@ -94,20 +95,25 @@
       cursor: pointer;
     }
 
-    button.send:hover {
+    .emo-btn {
+      font-size: 1.2rem;
       background-color: #005fa3;
+    }
+
+    button.send:hover, .emo-btn:hover {
+      background-color: #004f8a;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>TECLA – IA Inclusiva</h1>
+    <h1>TECLA Adapta – IA Inclusiva</h1>
   </header>
 
   <nav>
-    <button onclick="showTab('chat')">💬 Chat</button>
+    <button onclick="showTab('chat')">💬 Conversar</button>
     <button onclick="showTab('sobre')">ℹ️ Sobre</button>
-    <button onclick="showTab('ajuda')">🛠️ Ajuda</button>
+    <button onclick="showTab('ajuda')">🧭 Ajuda</button>
   </nav>
 
   <main id="chat" class="tab">
@@ -116,38 +122,28 @@
 
   <main id="sobre" class="tab" style="display:none">
     <h2>Sobre o TECLA</h2>
-    <p>TECLA é um projeto de Inteligência Artificial Inclusiva criado por Dala De Carvalho.</p>
-    <p>Seu objetivo é tornar a comunicação mais acessível para pessoas neurodiversas, com ou sem fala.</p>
+    <p>TECLA Adapta é um projeto criado por Dala De Carvalho para oferecer apoio na comunicação de pessoas com autismo ou dificuldades de expressão verbal.</p>
   </main>
 
   <main id="ajuda" class="tab" style="display:none">
-    <h2>Como usar</h2>
-    <p>Digite ou fale algo e o TECLA responderá com emoção.</p>
-    <h3>Emoções reconhecidas:</h3>
-    <ul>
-      <li>🙂 Feliz / Calmo</li>
-      <li>😢 Triste</li>
-      <li>😡 Zangado</li>
-      <li>😨 Assustado</li>
-      <li>🧡 Carinho / Amizade</li>
-    </ul>
+    <h2>Como Usar</h2>
+    <p>Você pode digitar, falar ou clicar nos botões abaixo para se comunicar com o TECLA.</p>
+    <p>Se o TECLA não souber uma resposta, ele vai perguntar se você quer ensiná-lo. Ele aprenderá automaticamente.</p>
   </main>
 
   <footer>
     <input type="text" id="userInput" placeholder="Digite ou fale aqui..." onkeypress="if(event.key==='Enter') sendMessage()"/>
     <button class="send" onclick="sendMessage()">Enviar</button>
     <button class="send" onclick="startListening()">🎙️ Falar</button>
+    <button class="emo-btn" onclick="quickSay('🙂 Estou feliz')">🙂</button>
+    <button class="emo-btn" onclick="quickSay('😢 Estou triste')">😢</button>
+    <button class="emo-btn" onclick="quickSay('😡 Estou zangado')">😡</button>
+    <button class="emo-btn" onclick="quickSay('🧡 Quero um abraço')">🧡</button>
   </footer>
 
   <script>
-    let respostas = {};
+    let respostas = JSON.parse(localStorage.getItem("respostas") || "{}");
     const chatBox = document.getElementById("chatBox");
-
-    // Carrega o JSON de respostas
-    fetch("respostas.json")
-      .then(response => response.json())
-      .then(data => respostas = data)
-      .catch(err => console.error("Erro ao carregar base:", err));
 
     function showTab(id) {
       document.querySelectorAll("main.tab").forEach(el => el.style.display = "none");
@@ -165,40 +161,56 @@
     function falar(texto) {
       const synth = window.speechSynthesis;
       const utter = new SpeechSynthesisUtterance(texto);
-      utter.lang = "en-US";
+      utter.lang = "pt-PT";
       synth.speak(utter);
     }
 
     function sendMessage() {
       const input = document.getElementById("userInput");
-      const text = input.value.trim().toLowerCase();
-      if (!text) return;
+      const texto = input.value.trim().toLowerCase();
+      if (!texto) return;
 
-      addMessage("🧑 " + text, "user");
+      addMessage("👤 " + texto, "user");
 
-      if (respostas[text]) {
-        const r = respostas[text];
-        const msg = `${r.emo} ${r.texto}`;
-        addMessage("🤖 " + msg, "bot");
-        falar(r.texto);
+      if (respostas[texto]) {
+        const resposta = respostas[texto];
+        addMessage("🤖 " + resposta, "bot");
+        falar(resposta);
+      } else if (texto.includes("dala")) {
+        const r = "🤖 Eu reconheço o Criador Dala De Carvalho! Obrigado por me dar vida.";
+        addMessage(r, "bot");
+        falar(r);
       } else {
-        const fallback = "❓ I haven’t learned that yet. Would you like to teach me?";
-        addMessage("🤖 " + fallback, "bot");
-        falar(fallback);
+        const pergunta = `❓ Não sei responder a isso ainda. Deseja ensinar-me?`;
+        addMessage(pergunta, "bot");
+        falar(pergunta);
+        setTimeout(() => {
+          const ensino = prompt("Digite a resposta para: " + texto);
+          if (ensino) {
+            respostas[texto] = ensino;
+            localStorage.setItem("respostas", JSON.stringify(respostas));
+            addMessage("✔️ Aprendi: " + ensino, "bot");
+            falar(ensino);
+          }
+        }, 500);
       }
 
       input.value = "";
     }
 
-    // Reconhecimento de fala
+    function quickSay(texto) {
+      document.getElementById("userInput").value = texto;
+      sendMessage();
+    }
+
     function startListening() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Navegador não suporta reconhecimento de voz.");
+        alert("Seu navegador não suporta voz.");
         return;
       }
       const recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
+      recognition.lang = "pt-PT";
       recognition.onresult = (event) => {
         document.getElementById("userInput").value = event.results[0][0].transcript;
         sendMessage();
