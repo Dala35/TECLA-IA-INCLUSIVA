@@ -3,98 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECLA IA Inclusiva com Voz</title>
+  <title>TECLA IA Inclusiva</title>
   <style>
     body {
-      background: #f4f4f4;
       font-family: Arial, sans-serif;
-      padding: 2rem;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
       text-align: center;
     }
     h1 {
       color: #b22222;
     }
-    #chat {
-      max-width: 600px;
-      margin: auto;
-      text-align: left;
+    #chat-box {
       background: white;
-      padding: 1rem;
-      border-radius: 10px;
-      height: 300px;
-      overflow-y: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: left;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    }
+    .user-msg {
+      color: black;
+      margin-top: 10px;
+    }
+    .bot-msg {
+      color: green;
+      margin-bottom: 10px;
     }
     input, button {
-      margin-top: 1rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      cursor: pointer;
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <h1>TECLA IA Inclusiva 🔊</h1>
-  <div id="chat"></div>
-  <input type="text" id="input" placeholder="Escreve ou fala aqui..." />
-  <button onclick="enviar()">Enviar</button>
-  <button onclick="falar()">🎤 Falar</button>
+  <h1>TECLA IA Inclusiva</h1>
+  <p>🔊</p>
+  <div id="chat-box"></div>
+  <input id="userInput" type="text" placeholder="Escreve ou fala aqui..." />
+  <button onclick="sendMessage()">Enviar</button>
+  <button onclick="startRecognition()">🎤 Falar</button>
 
   <script>
-    const chat = document.getElementById('chat');
-    const input = document.getElementById('input');
-
-    const memoria = {
+    const biblioteca = {
       "olá": "Olá! Como posso ajudar?",
-      "quem és tu": "Sou a TECLA IA, criada para apoiar e incluir.",
-      "obrigado": "Estou sempre aqui!",
-      "tudo bem": "Está tudo sim! E contigo?",
-      "adeus": "Tchau! Volta sempre."
+      "quem és?": "Sou a TECLA IA, uma amiga virtual feita para comunicar com carinho.",
+      "qual é a tua missão?": "A minha missão é ajudar pessoas, especialmente quem precisa de apoio extra.",
+      "porque foste criada?": "Fui criada para apoiar a comunicação de quem tem mais dificuldade em se expressar.",
+      "estou triste": "Sinto muito que estejas assim. Queres conversar sobre isso? Estou aqui para ti.",
+      "o que é amizade?": "Amizade é quando alguém gosta de ti, cuida de ti e te respeita.",
+      "o que posso fazer quando estou sozinho?": "Podes desenhar, ouvir música calma, brincar com um brinquedo que gostas ou conversar comigo.",
+      "adeus": "Até logo! Estarei aqui quando precisares."
     };
 
-    function escrever(msg, classe = 'user') {
-      const div = document.createElement('div');
-      div.textContent = msg;
-      div.style.margin = '0.5rem 0';
-      div.style.color = classe === 'user' ? '#222' : '#006400';
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
+    const chatBox = document.getElementById("chat-box");
+
+    function addMessage(message, sender) {
+      const msg = document.createElement("div");
+      msg.className = sender === "user" ? "user-msg" : "bot-msg";
+      msg.textContent = message;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function responder(texto) {
-      let resposta = memoria[texto.toLowerCase()] || "Ainda não aprendi isso. Queres ensinar-me?";
-      escrever(resposta, 'bot');
-      falarTexto(resposta);
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim().toLowerCase();
+      if (text === "") return;
+
+      addMessage(text, "user");
+
+      const resposta = biblioteca[text] || "Ainda não aprendi isso. Queres ensinar-me?";
+      addMessage(resposta, "bot");
+      input.value = "";
     }
 
-    function enviar() {
-      const msg = input.value.trim();
-      if (!msg) return;
-      escrever(msg, 'user');
-      responder(msg);
-      input.value = '';
-    }
+    function startRecognition() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Reconhecimento de voz não suportado neste navegador.");
+        return;
+      }
 
-    function falar() {
-      const reconhecimento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      reconhecimento.lang = 'pt-PT';
-      reconhecimento.start();
-
-      reconhecimento.onresult = function (event) {
-        const resultado = event.results[0][0].transcript;
-        escrever(resultado, 'user');
-        responder(resultado);
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "pt-PT";
+      recognition.onresult = function(event) {
+        const result = event.results[0][0].transcript;
+        document.getElementById("userInput").value = result;
+        sendMessage();
       };
-    }
-
-    function falarTexto(texto) {
-      const fala = new SpeechSynthesisUtterance(texto);
-      fala.lang = 'pt-PT';
-      window.speechSynthesis.speak(fala);
+      recognition.start();
     }
   </script>
 </body>
