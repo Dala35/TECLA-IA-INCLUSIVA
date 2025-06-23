@@ -1,169 +1,209 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECLA IA Inclusiva</title>
+  <title>TECLA – IA Inclusiva</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f6fc;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #e6f0ff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
+
     header {
-      background-color: #4682b4;
-      padding: 20px;
+      background-color: #005f99;
       color: white;
+      padding: 1rem;
       text-align: center;
     }
+
     nav {
-      background: #e0eaf5;
-      padding: 10px;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      background-color: #0077cc;
     }
+
     nav button {
-      padding: 10px 15px;
+      background: transparent;
       border: none;
-      background: #4682b4;
       color: white;
-      border-radius: 8px;
+      padding: 1rem;
+      font-size: 1rem;
       cursor: pointer;
     }
+
     nav button:hover {
-      background: #5a9bd5;
+      background-color: #3399ff;
     }
-    .page {
-      display: none;
-      padding: 20px;
+
+    main {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
     }
-    .active {
-      display: block;
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    #chat-box {
-      background: white;
+
+    .user-msg, .bot-msg {
+      max-width: 75%;
+      padding: 0.75rem;
       border-radius: 12px;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: left;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+      font-size: 18px;
+      line-height: 1.4;
     }
+
     .user-msg {
-      color: black;
-      margin-top: 10px;
+      align-self: flex-end;
+      background-color: #d9edf7;
     }
+
     .bot-msg {
-      color: green;
-      margin-bottom: 10px;
+      align-self: flex-start;
+      background-color: #fff3cd;
     }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
+
     footer {
-      background: #e0eaf5;
-      text-align: center;
-      padding: 10px;
-      font-size: 12px;
-      margin-top: 20px;
+      padding: 0.5rem;
+      background: #ccc;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    input {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #999;
+      border-radius: 6px;
+    }
+
+    button.send {
+      padding: 0.75rem 1rem;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button.send:hover {
+      background-color: #005fa3;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🤖 TECLA IA Inclusiva 🌍</h1>
-    <p>Seu assistente amigável para comunicação neurodiversa ✨</p>
+    <h1>TECLA – IA Inclusiva</h1>
   </header>
 
   <nav>
-    <button onclick="showPage('chat')">💬 Conversar</button>
-    <button onclick="showPage('about')">ℹ️ Sobre</button>
-    <button onclick="showPage('help')">🛟 Ajuda</button>
+    <button onclick="showTab('chat')">💬 Chat</button>
+    <button onclick="showTab('sobre')">ℹ️ Sobre</button>
+    <button onclick="showTab('ajuda')">🛠️ Ajuda</button>
   </nav>
 
-  <div id="chat" class="page active">
-    <div id="chat-box"></div>
-    <input id="userInput" type="text" placeholder="Escreve ou fala aqui..." />
-    <button onclick="sendMessage()">📤 Enviar</button>
-    <button onclick="startRecognition()">🎤 Falar</button>
-  </div>
+  <main id="chat" class="tab">
+    <div class="chat-container" id="chatBox"></div>
+  </main>
 
-  <div id="about" class="page">
-    <h2>ℹ️ Sobre o TECLA</h2>
-    <p>🤖 O TECLA é um chatbot de IA inclusiva projetado para apoiar pessoas com autismo e dificuldades de comunicação.</p>
-    <p>🌟 Ele oferece respostas gentis, claras e com apoio emocional num ambiente calmo.</p>
-  </div>
+  <main id="sobre" class="tab" style="display:none">
+    <h2>Sobre o TECLA</h2>
+    <p>TECLA é um projeto de Inteligência Artificial Inclusiva criado por Dala De Carvalho.</p>
+    <p>Seu objetivo é tornar a comunicação mais acessível para pessoas neurodiversas, com ou sem fala.</p>
+  </main>
 
-  <div id="help" class="page">
-    <h2>🛟 Ajuda e Dicas</h2>
+  <main id="ajuda" class="tab" style="display:none">
+    <h2>Como usar</h2>
+    <p>Digite ou fale algo e o TECLA responderá com emoção.</p>
+    <h3>Emoções reconhecidas:</h3>
     <ul>
-      <li>💡 Diz: "olá", "quem és tu", "estou triste", "o que é amizade", e mais.</li>
-      <li>🎤 Clica no microfone para usar a tua voz (disponível em alguns navegadores).</li>
-      <li>📱 Funciona offline depois de carregar uma vez. Adiciona à tela inicial!</li>
+      <li>🙂 Feliz / Calmo</li>
+      <li>😢 Triste</li>
+      <li>😡 Zangado</li>
+      <li>😨 Assustado</li>
+      <li>🧡 Carinho / Amizade</li>
     </ul>
-  </div>
+  </main>
 
   <footer>
-    Criado por Dala De Carvalho – Educador Musical Inclusivo 🇦🇴
+    <input type="text" id="userInput" placeholder="Digite ou fale aqui..." onkeypress="if(event.key==='Enter') sendMessage()"/>
+    <button class="send" onclick="sendMessage()">Enviar</button>
+    <button class="send" onclick="startListening()">🎙️ Falar</button>
   </footer>
 
   <script>
-    const pages = document.querySelectorAll('.page');
-    function showPage(id) {
-      pages.forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+    let respostas = {};
+    const chatBox = document.getElementById("chatBox");
+
+    // Carrega o JSON de respostas
+    fetch("respostas.json")
+      .then(response => response.json())
+      .then(data => respostas = data)
+      .catch(err => console.error("Erro ao carregar base:", err));
+
+    function showTab(id) {
+      document.querySelectorAll("main.tab").forEach(el => el.style.display = "none");
+      document.getElementById(id).style.display = "block";
     }
 
-    const library = {
-      "olá": "👋 Olá! Como posso ajudar hoje?",
-      "quem és tu": "🤖 Eu sou o TECLA, o teu amigo com inteligência artificial.",
-      "qual é a tua missão": "🎯 A minha missão é apoiar a comunicação de forma gentil e respeitosa.",
-      "por que foste criado": "💡 Fui criado para ajudar pessoas que precisam de apoio para se expressarem.",
-      "estou triste": "😢 Lamento que estejas assim. Queres conversar sobre isso? Estou aqui para ti.",
-      "o que é amizade": "🧡 Amizade é quando alguém se importa contigo, te respeita e quer o teu bem.",
-      "o que posso fazer quando me sinto sozinho": "🎨 Podes desenhar, ouvir música, brincar com algo que gostas ou falar comigo.",
-      "adeus": "👋 Até logo! Estarei aqui sempre que precisares."
-    };
-
-    const chatBox = document.getElementById("chat-box");
-
-    function addMessage(message, sender) {
-      const msg = document.createElement("div");
-      msg.className = sender === "user" ? "user-msg" : "bot-msg";
-      msg.textContent = message;
-      chatBox.appendChild(msg);
+    function addMessage(msg, sender) {
+      const el = document.createElement("div");
+      el.className = sender === "user" ? "user-msg" : "bot-msg";
+      el.textContent = msg;
+      chatBox.appendChild(el);
       chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function falar(texto) {
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(texto);
+      utter.lang = "en-US";
+      synth.speak(utter);
     }
 
     function sendMessage() {
       const input = document.getElementById("userInput");
       const text = input.value.trim().toLowerCase();
-      if (text === "") return;
+      if (!text) return;
 
       addMessage("🧑 " + text, "user");
 
-      const resposta = library[text] || "❓ Ainda não aprendi isso. Queres ensinar-me?";
-      addMessage("🤖 " + resposta, "bot");
+      if (respostas[text]) {
+        const r = respostas[text];
+        const msg = `${r.emo} ${r.texto}`;
+        addMessage("🤖 " + msg, "bot");
+        falar(r.texto);
+      } else {
+        const fallback = "❓ I haven’t learned that yet. Would you like to teach me?";
+        addMessage("🤖 " + fallback, "bot");
+        falar(fallback);
+      }
+
       input.value = "";
     }
 
-    function startRecognition() {
-      try {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = "pt-PT";
-        recognition.onresult = function(event) {
-          const result = event.results[0][0].transcript;
-          document.getElementById("userInput").value = result;
-          sendMessage();
-        };
-        recognition.start();
-      } catch (e) {
-        alert("🎤 O reconhecimento de voz não é suportado neste dispositivo/navegador.");
+    // Reconhecimento de fala
+    function startListening() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Navegador não suporta reconhecimento de voz.");
+        return;
       }
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.onresult = (event) => {
+        document.getElementById("userInput").value = event.results[0][0].transcript;
+        sendMessage();
+      };
+      recognition.start();
     }
   </script>
 </body>
